@@ -1,0 +1,12 @@
+using FluentValidation;
+
+namespace ProductManagement.Application.Features.Products.{{FeatureName}};
+
+public sealed class {{FeatureName}}{{Type}}Validator
+    : AbstractValidator<{{FeatureName}}{{Type}}>
+{
+    public {{FeatureName}}{{Type}}Validator()
+    {
+        // {{ValidationRules}}
+    }
+}

@@ -1,0 +1,39 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit(**/*.cs)|Write(**/*.cs)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "dotnet format --verify-no-changes --include $file 2>&1 || dotnet format --include $file"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit(**/*.csproj)|Write(**/*.csproj)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "dotnet restore && dotnet build --no-restore -warnaserror"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash(rm:*)|Bash(git push:*)",
+        "hooks": [
+          { "type": "command", "command": "echo 'Destructive command — confirm in chat' && exit 1" }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "dotnet --version && echo 'Solution loaded:' && ls *.sln 2>/dev/null" }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+using MediatR;
+
+namespace ProductManagement.Application.Features.Products.{{FeatureName}};
+
+public sealed record {{FeatureName}}{{Type}}(
+    {{Parameters}}
+) : IRequest<{{ReturnType}}>;

@@ -1,0 +1,13 @@
+using FluentAssertions;
+using FluentValidation.TestHelper;
+using ProductManagement.Application.Features.Products.{{FeatureName}};
+using Xunit;
+
+namespace ProductManagement.Application.Tests.Features.Products.{{FeatureName}};
+
+public class {{FeatureName}}{{Type}}ValidatorTests
+{
+    private readonly {{FeatureName}}{{Type}}Validator _sut = new();
+
+    // {{RuleTests}}
+}

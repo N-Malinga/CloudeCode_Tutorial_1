@@ -1,0 +1,19 @@
+using MediatR;
+using ProductManagement.Application.Abstractions;
+using ProductManagement.Domain.Products;
+
+namespace ProductManagement.Application.Features.Products.{{FeatureName}};
+
+public sealed class {{FeatureName}}{{Type}}Handler(
+    IProductRepository repository,
+    IUnitOfWork unitOfWork)
+    : IRequestHandler<{{FeatureName}}{{Type}}, {{ReturnType}}>
+{
+    public async Task<{{ReturnType}}> Handle(
+        {{FeatureName}}{{Type}} request,
+        CancellationToken cancellationToken)
+    {
+        // {{HandlerBody}}
+        throw new NotImplementedException();
+    }
+}

@@ -1,0 +1,36 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = crlf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{json,yml,yaml,xml,csproj,props,targets}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.cs]
+# Use file-scoped namespaces
+csharp_style_namespace_declarations = file_scoped:warning
+
+[**/Migrations/*.cs]
+# EF Core generates block-scoped namespaces in migration files
+generated_code = true
+csharp_style_namespace_declarations = block_scoped:none
+dotnet_diagnostic.IDE0161.severity = none
+
+# Prefer expression-bodied members where appropriate
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+csharp_style_expression_bodied_properties = true:suggestion
+
+# var preferences
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+
+# Disable XML doc requirement so warnings-as-errors does not bite us
+dotnet_diagnostic.CS1591.severity = none

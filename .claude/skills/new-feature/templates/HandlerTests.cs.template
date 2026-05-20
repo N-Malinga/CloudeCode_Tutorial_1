@@ -1,0 +1,34 @@
+using FluentAssertions;
+using Moq;
+using ProductManagement.Application.Abstractions;
+using ProductManagement.Application.Features.Products.{{FeatureName}};
+using ProductManagement.Domain.Products;
+using Xunit;
+
+namespace ProductManagement.Application.Tests.Features.Products.{{FeatureName}};
+
+public class {{FeatureName}}{{Type}}HandlerTests
+{
+    private readonly Mock<IProductRepository> _repository = new();
+    private readonly Mock<IUnitOfWork> _unitOfWork = new();
+
+    private {{FeatureName}}{{Type}}Handler CreateSut() =>
+        new(_repository.Object, _unitOfWork.Object);
+
+    [Fact]
+    public async Task Handle_HappyPath_{{HappyPathAssertion}}()
+    {
+        // arrange — {{HappyPathArrange}}
+        // act
+        // assert
+    }
+
+    [Fact]
+    public async Task Handle_ProductNotFound_Throws()
+    {
+        // arrange — repository returns null
+        // act + assert
+    }
+
+    // {{AdditionalCases}}
+}

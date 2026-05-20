@@ -1,0 +1,10 @@
+using FluentAssertions;
+using ProductManagement.Domain.Products;
+using Xunit;
+
+namespace ProductManagement.Domain.Tests.Products;
+
+public class Product{{BehaviourName}}Tests
+{
+    // {{InvariantTests}}
+}
