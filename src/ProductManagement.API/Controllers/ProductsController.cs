@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductManagement.Application.Common.Models;
 using ProductManagement.Application.Products.Commands.AdjustStock;
+using ProductManagement.Application.Products.Commands.BulkAdjustPrice;
 using ProductManagement.Application.Products.Commands.CreateProduct;
 using ProductManagement.Application.Products.Commands.DeleteProduct;
 using ProductManagement.Application.Products.Commands.UpdateProduct;
@@ -84,6 +85,18 @@ public sealed class ProductsController(ISender sender) : ControllerBase
     {
         await sender.Send(new AdjustStockCommand(id, body.Delta), cancellationToken);
         return NoContent();
+    }
+
+    [HttpPost("price-adjustment")]
+    [ProducesResponseType(typeof(BulkAdjustPriceResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+    public async Task<ActionResult<BulkAdjustPriceResult>> AdjustPrices(
+        [FromBody] BulkAdjustPriceCommand command,
+        CancellationToken cancellationToken)
+    {
+        var result = await sender.Send(command, cancellationToken);
+        return Ok(result);
     }
 }
 

@@ -9,6 +9,11 @@ public sealed class ProductRepository(ProductManagementDbContext dbContext) : IP
     public Task<Product?> GetByIdAsync(Guid id, CancellationToken cancellationToken) =>
         dbContext.Products.FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
 
+    public async Task<IReadOnlyList<Product>> GetByCategoryAsync(ProductCategory category, CancellationToken cancellationToken) =>
+        await dbContext.Products
+            .Where(p => p.Category == category && p.IsActive)
+            .ToListAsync(cancellationToken);
+
     public async Task AddAsync(Product product, CancellationToken cancellationToken) =>
         await dbContext.Products.AddAsync(product, cancellationToken);
 

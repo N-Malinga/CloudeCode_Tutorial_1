@@ -96,6 +96,20 @@ public sealed class Product : Entity
         Raise(new ProductPriceChangedEvent(Id, oldAmount, newPrice.Amount, newPrice.Currency, timestamp));
     }
 
+    public void AdjustPrice(decimal percentage, DateTime? updatedAtUtc = null)
+    {
+        if (percentage == 0)
+            throw new DomainException("Price adjustment percentage must be non-zero.");
+
+        var factor = 1m + (percentage / 100m);
+        var newAmount = Math.Round(Price.Amount * factor, 2, MidpointRounding.AwayFromZero);
+
+        if (newAmount <= 0)
+            throw new DomainException("Adjusted price must remain greater than zero.");
+
+        ChangePrice(Money.Create(newAmount, Price.Currency), updatedAtUtc);
+    }
+
     public void DepleteStock(int quantity, DateTime? updatedAtUtc = null)
     {
         if (quantity <= 0)

@@ -209,4 +209,74 @@ public class ProductTests
         act.Should().Throw<DomainException>();
         product.StockQuantity.Should().Be(10);
     }
+
+    [Fact]
+    public void AdjustPrice_NegativePercentage_ReducesPriceAndRaisesEvent()
+    {
+        var product = MakeProduct(price: 100m);
+        product.ClearDomainEvents();
+
+        product.AdjustPrice(-10m);
+
+        product.Price.Amount.Should().Be(90m);
+        product.Price.Currency.Should().Be("USD");
+        product.DomainEvents.Should().ContainSingle()
+            .Which.Should().BeOfType<ProductPriceChangedEvent>()
+            .Which.NewAmount.Should().Be(90m);
+    }
+
+    [Fact]
+    public void AdjustPrice_PositivePercentage_IncreasesPrice()
+    {
+        var product = MakeProduct(price: 100m);
+        product.ClearDomainEvents();
+
+        product.AdjustPrice(25m);
+
+        product.Price.Amount.Should().Be(125m);
+    }
+
+    [Fact]
+    public void AdjustPrice_RoundsToTwoDecimals()
+    {
+        var product = MakeProduct(price: 9.99m);
+        product.ClearDomainEvents();
+
+        product.AdjustPrice(-10m); // 9.99 * 0.9 = 8.991 -> 8.99
+
+        product.Price.Amount.Should().Be(8.99m);
+    }
+
+    [Fact]
+    public void AdjustPrice_ZeroPercentage_Throws()
+    {
+        var product = MakeProduct();
+
+        var act = () => product.AdjustPrice(0m);
+
+        act.Should().Throw<DomainException>();
+    }
+
+    [Fact]
+    public void AdjustPrice_ResultWouldDropToZeroOrBelow_Throws()
+    {
+        var product = MakeProduct(price: 0.04m);
+        product.ClearDomainEvents();
+
+        var act = () => product.AdjustPrice(-90m); // 0.04 * 0.1 = 0.004 -> 0.00
+
+        act.Should().Throw<DomainException>();
+        product.Price.Amount.Should().Be(0.04m);
+        product.DomainEvents.Should().BeEmpty();
+    }
+
+    [Fact]
+    public void AdjustPrice_KeepsSameCurrency()
+    {
+        var product = MakeProduct(price: 100m);
+
+        product.AdjustPrice(10m);
+
+        product.Price.Currency.Should().Be("USD");
+    }
 }
