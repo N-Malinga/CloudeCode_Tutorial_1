@@ -24,16 +24,25 @@
       {
         "matcher": "Bash(rm:*)|Bash(git push:*)",
         "hooks": [
-          { "type": "command", "command": "echo 'Destructive command — confirm in chat' && exit 1" }
+          {
+            "type": "command",
+            "command": "echo 'Destructive command — confirm in chat' && exit 1"
+          }
         ]
       }
     ],
     "SessionStart": [
       {
         "hooks": [
-          { "type": "command", "command": "dotnet --version && echo 'Solution loaded:' && ls *.sln 2>/dev/null" }
+          {
+            "type": "command",
+            "command": "dotnet --version && echo 'Solution loaded:' && ls *.sln 2>/dev/null"
+          }
         ]
       }
     ]
+  },
+  "enabledPlugins": {
+    "microsoft-docs@claude-plugins-official": true
   }
 }
