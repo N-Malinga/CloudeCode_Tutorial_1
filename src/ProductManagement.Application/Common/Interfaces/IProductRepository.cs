@@ -14,4 +14,5 @@ public interface IProductRepository
         int page,
         int pageSize,
         CancellationToken cancellationToken);
+    Task<int> CountAsync(ProductCategory? category, bool? isActive, CancellationToken cancellationToken);
 }

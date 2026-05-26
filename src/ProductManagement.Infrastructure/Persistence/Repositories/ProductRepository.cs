@@ -47,4 +47,17 @@ public sealed class ProductRepository(ProductManagementDbContext dbContext) : IP
 
         return (items, total);
     }
+
+    public async Task<int> CountAsync(ProductCategory? category, bool? isActive, CancellationToken cancellationToken)
+    {
+        var query = dbContext.Products.AsNoTracking().AsQueryable();
+
+        if (category.HasValue)
+            query = query.Where(p => p.Category == category.Value);
+
+        if (isActive.HasValue)
+            query = query.Where(p => p.IsActive == isActive.Value);
+
+        return await query.CountAsync(cancellationToken);
+    }
 }
