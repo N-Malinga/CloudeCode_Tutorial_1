@@ -8,6 +8,7 @@ using ProductManagement.Application.Products.Commands.DeleteProduct;
 using ProductManagement.Application.Products.Commands.UpdateProduct;
 using ProductManagement.Application.Products.Dtos;
 using ProductManagement.Application.Products.Queries.GetProductById;
+using ProductManagement.Application.Products.Queries.GetProductCount;
 using ProductManagement.Application.Products.Queries.GetProductsPaged;
 using ProductManagement.Domain.Products;
 
@@ -47,6 +48,18 @@ public sealed class ProductsController(ISender sender) : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var result = await sender.Send(new GetProductsPagedQuery(page, pageSize, category, search), cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpGet("count")]
+    [ProducesResponseType(typeof(GetProductCountResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<GetProductCountResult>> Count(
+        [FromQuery] ProductCategory? category = null,
+        [FromQuery] bool? isActive = null,
+        CancellationToken cancellationToken = default)
+    {
+        var result = await sender.Send(new GetProductCountQuery(category, isActive), cancellationToken);
         return Ok(result);
     }
 
