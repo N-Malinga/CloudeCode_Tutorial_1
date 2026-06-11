@@ -30,7 +30,7 @@ API             ← Application, Infrastructure
 **Cross-cutting:**
 
 - Domain events extend `IDomainEvent` (which is `MediatR.INotification`). They are raised on entities and dispatched by `UnitOfWork.SaveChangesAsync` *after* the DB write succeeds.
-- Exceptions: `DomainException` (invariant violation) → 422, `NotFoundException` → 404, `ValidationException` → 400 — all mapped to `ProblemDetails` in `GlobalExceptionHandler` (an `IExceptionHandler` registered via `AddExceptionHandler` + `UseExceptionHandler`).
+- Exceptions: application failures derive from `AppException` (in `Application/Common/Exceptions`), a "smart" base exposing `StatusCode` + `Title` — `NotFoundException` → 404, `BadRequestException` → 400, `ValidationException` → 400 (with per-field errors). `DomainException` lives in the Domain layer (so it can't derive from `AppException`) and is mapped to 422 explicitly. All are turned into RFC 7807 `ProblemDetails` by `GlobalExceptionHandler` (an `IExceptionHandler` registered via `AddExceptionHandler` + `UseExceptionHandler`). Each response carries a `traceId` (added centrally via `AddProblemDetails(CustomizeProblemDetails)`) that matches the log entry; in .NET 10 the middleware suppresses its own diagnostics once the handler returns `true`, so there are no duplicate logs. Unexpected (500) details are hidden outside Development.
 
 ---
 

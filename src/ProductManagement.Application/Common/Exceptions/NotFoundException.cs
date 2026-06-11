@@ -1,6 +1,6 @@
 namespace ProductManagement.Application.Common.Exceptions;
 
-public sealed class NotFoundException : Exception
+public sealed class NotFoundException : AppException
 {
     public string EntityName { get; }
     public object Key { get; }
@@ -11,4 +11,7 @@ public sealed class NotFoundException : Exception
         EntityName = entityName;
         Key = key;
     }
+
+    public override int StatusCode => 404;
+    public override string Title => "Resource not found";
 }

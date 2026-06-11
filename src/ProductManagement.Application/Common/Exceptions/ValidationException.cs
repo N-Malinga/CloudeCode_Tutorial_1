@@ -2,7 +2,7 @@ using FluentValidation.Results;
 
 namespace ProductManagement.Application.Common.Exceptions;
 
-public sealed class ValidationException : Exception
+public sealed class ValidationException : AppException
 {
     public IReadOnlyDictionary<string, string[]> Errors { get; }
 
@@ -18,4 +18,7 @@ public sealed class ValidationException : Exception
             .GroupBy(f => f.PropertyName, f => f.ErrorMessage)
             .ToDictionary(g => g.Key, g => g.ToArray());
     }
+
+    public override int StatusCode => 400;
+    public override string Title => "One or more validation errors occurred.";
 }
