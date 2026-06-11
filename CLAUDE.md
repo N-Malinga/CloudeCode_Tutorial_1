@@ -30,7 +30,7 @@ API             ← Application, Infrastructure
 **Cross-cutting:**
 
 - Domain events extend `IDomainEvent` (which is `MediatR.INotification`). They are raised on entities and dispatched by `UnitOfWork.SaveChangesAsync` *after* the DB write succeeds.
-- Exceptions: `DomainException` (invariant violation) → 422, `NotFoundException` → 404, `ValidationException` → 400 — all mapped to `ProblemDetails` in `GlobalExceptionMiddleware`.
+- Exceptions: `DomainException` (invariant violation) → 422, `NotFoundException` → 404, `ValidationException` → 400 — all mapped to `ProblemDetails` in `GlobalExceptionHandler` (an `IExceptionHandler` registered via `AddExceptionHandler` + `UseExceptionHandler`).
 
 ---
 

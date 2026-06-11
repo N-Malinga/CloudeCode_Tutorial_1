@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using ProductManagement.API.ExceptionHandlers;
 using ProductManagement.API.HealthChecks;
-using ProductManagement.API.Middleware;
 using ProductManagement.Application;
 using ProductManagement.Infrastructure;
 using ProductManagement.Infrastructure.Persistence;
@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 builder.Services.AddOpenApiDocument(options =>
@@ -27,7 +28,7 @@ builder.Services.AddHealthChecks()
 
 var app = builder.Build();
 
-app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {
